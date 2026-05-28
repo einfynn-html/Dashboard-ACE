@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Dashboard</title>
   <meta name="app-file-name" content="Dashboard ACE" />
+  <meta name="app-version" content="1.0.52" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script>
     (function () {
@@ -1468,6 +1469,51 @@ body {
     }
     /* === END ULTRA CLEAR GLASS DESIGN === */
 
+
+    .update-prompt {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(6, 10, 20, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      z-index: 100001;
+    }
+    .update-prompt.show {
+      display: flex;
+    }
+    .update-prompt-card {
+      width: min(100%, 520px);
+      border-radius: 28px;
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+      color: var(--text);
+      text-align: left;
+    }
+    .update-prompt-card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      text-transform: none;
+    }
+    .update-prompt-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    .update-prompt-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
     /* === UI DESIGN MODES === */
     :root {
       --ui-surface-bg: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
@@ -1878,44 +1924,6 @@ body {
       box-shadow: 0 8px 20px rgba(0,0,0,0.18) !important;
     }
 </style>
-
-  <style>
-    #updatePopupOverlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-      background: rgba(6, 10, 20, 0.58);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      z-index: 100001;
-    }
-    #updatePopupOverlay.show { display: flex; }
-    .update-popup-card {
-      width: min(100%, 520px);
-      border-radius: 28px;
-      padding: 20px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: 0 22px 60px rgba(0,0,0,0.45);
-      color: var(--text);
-    }
-    .update-popup-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .update-popup-icon {
-      width: 44px; height: 44px; border-radius: 16px; display: grid; place-items: center;
-      background: rgba(123,220,255,0.18); font-size: 22px; flex: 0 0 auto;
-    }
-    .update-popup-title { margin: 0; font-size: 22px; letter-spacing: -0.02em; line-height: 1.1; }
-    .update-popup-subtitle { margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
-    .update-popup-body { margin: 0 0 16px; font-size: 14px; line-height: 1.5; color: var(--muted); }
-    .update-popup-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .update-popup-actions .btn,
-    .update-popup-actions .btn.secondary,
-    .update-popup-actions a.btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
-  </style>
-
 </head>
 <body>
   <!-- LADEBILDSCHIRM -->
@@ -2449,24 +2457,6 @@ style="padding:10px;border-radius:12px;background:rgba(255,255,255,0.95);color:b
 
 
 
-
-  <div class="update-popup-overlay" id="updatePopupOverlay" aria-hidden="true">
-    <div class="update-popup-card" role="dialog" aria-modal="true" aria-labelledby="updatePopupTitle">
-      <div class="update-popup-head">
-        <div class="update-popup-icon">⬆️</div>
-        <div>
-          <h3 class="update-popup-title" id="updatePopupTitle">Neue Version verfügbar</h3>
-          <p class="update-popup-subtitle" id="updatePopupSubtitle">GitHub hat eine frischere Datei gefunden.</p>
-        </div>
-      </div>
-      <p class="update-popup-body" id="updatePopupBody">Eine neuere Version wurde gefunden. Öffne den Link, um sie direkt herunterzuladen oder im Repository anzusehen.</p>
-      <div class="update-popup-actions">
-        <a class="btn" id="updatePopupOpenLink" href="#" target="_blank" rel="noopener noreferrer">Neue Version öffnen</a>
-        <button class="btn secondary" id="updatePopupLaterBtn" type="button">Später</button>
-      </div>
-    </div>
-  </div>
-
   <div class="notification-popup" id="notificationPopup" aria-live="polite" aria-atomic="true"></div>
   <div class="location-prompt" id="locationPrompt" aria-hidden="true">
     <div class="location-prompt-card" role="dialog" aria-modal="true" aria-labelledby="locationPromptTitle">
@@ -2476,6 +2466,16 @@ style="padding:10px;border-radius:12px;background:rgba(255,255,255,0.95);color:b
         <button class="btn" id="locationAllowBtn" type="button">Ja, merken</button>
         <button class="btn secondary" id="locationLaterBtn" type="button">Später</button>
         <button class="btn secondary" id="locationDenyBtn" type="button">Nein</button>
+      </div>
+    </div>
+  </div>
+  <div class="update-prompt" id="updatePrompt" aria-hidden="true">
+    <div class="update-prompt-card" role="dialog" aria-modal="true" aria-labelledby="updatePromptTitle">
+      <h3 id="updatePromptTitle">update to new version</h3>
+      <p id="updatePromptText">update to new version</p>
+      <div class="update-prompt-actions">
+        <button class="btn" id="updateReloadBtn" type="button">update to new version</button>
+        <button class="btn secondary" id="updateDismissBtn" type="button">Später</button>
       </div>
     </div>
   </div>
@@ -2519,6 +2519,133 @@ style="padding:10px;border-radius:12px;background:rgba(255,255,255,0.95);color:b
     document.addEventListener('touchstart', () => {
       hideLoaderSafe();
     }, { once:true });
+
+
+    const DASHBOARD_CURRENT_VERSION = '1.0.52';
+    const DASHBOARD_VERSION_URL = './version.json';
+    const DASHBOARD_UPDATE_SEEN_KEY = 'dashboard_update_popup_seen';
+
+    function parseVersionParts(value) {
+      return String(value || '')
+        .trim()
+        .replace(/^v/i, '')
+        .split(/[^\d]+/)
+        .filter(Boolean)
+        .map((part) => Number.parseInt(part, 10))
+        .map((part) => Number.isFinite(part) ? part : 0);
+    }
+
+    function compareVersions(a, b) {
+      const pa = parseVersionParts(a);
+      const pb = parseVersionParts(b);
+      const max = Math.max(pa.length, pb.length);
+      for (let i = 0; i < max; i += 1) {
+        const av = pa[i] ?? 0;
+        const bv = pb[i] ?? 0;
+        if (av > bv) return 1;
+        if (av < bv) return -1;
+      }
+      return 0;
+    }
+
+    function setUpdatePromptVisible(visible, latestVersion = '') {
+      const prompt = document.getElementById('updatePrompt');
+      if (!prompt) return;
+      prompt.classList.toggle('show', !!visible);
+      prompt.setAttribute('aria-hidden', visible ? 'false' : 'true');
+
+      const text = document.getElementById('updatePromptText');
+      if (text && latestVersion) {
+        text.textContent = `update to new version${latestVersion ? ` (${latestVersion})` : ''}`;
+      }
+    }
+
+    function showUpdatePrompt(latestVersion) {
+      try {
+        localStorage.setItem(DASHBOARD_UPDATE_SEEN_KEY, latestVersion || DASHBOARD_CURRENT_VERSION);
+      } catch (e) {}
+      setUpdatePromptVisible(true, latestVersion);
+    }
+
+    function dismissUpdatePrompt() {
+      try {
+        localStorage.setItem(DASHBOARD_UPDATE_SEEN_KEY, DASHBOARD_CURRENT_VERSION);
+      } catch (e) {}
+      setUpdatePromptVisible(false);
+    }
+
+    async function checkForDashboardUpdate() {
+      try {
+        const response = await fetch(`${DASHBOARD_VERSION_URL}?t=${Date.now()}`, { cache: 'no-store' });
+        if (!response.ok) return;
+
+        let latestVersion = '';
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          const data = await response.json();
+          latestVersion = data.version || data.latest || data.appVersion || '';
+        } else {
+          const text = (await response.text()).trim();
+          if (text.startsWith('{')) {
+            try {
+              const data = JSON.parse(text);
+              latestVersion = data.version || data.latest || data.appVersion || '';
+            } catch (e) {}
+          } else {
+            latestVersion = text;
+          }
+        }
+
+        latestVersion = String(latestVersion || '').trim();
+        if (!latestVersion) return;
+
+        const seenVersion = (() => {
+          try { return localStorage.getItem(DASHBOARD_UPDATE_SEEN_KEY) || ''; } catch (e) { return ''; }
+        })();
+
+        const isNewer = compareVersions(latestVersion, DASHBOARD_CURRENT_VERSION) > 0;
+        if (isNewer && seenVersion !== latestVersion) {
+          showUpdatePrompt(latestVersion);
+        } else if (!isNewer && seenVersion !== DASHBOARD_CURRENT_VERSION) {
+          try {
+            localStorage.setItem(DASHBOARD_UPDATE_SEEN_KEY, DASHBOARD_CURRENT_VERSION);
+          } catch (e) {}
+        }
+      } catch (e) {
+        // no-op: offline or file missing
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const reloadBtn = document.getElementById('updateReloadBtn');
+      const dismissBtn = document.getElementById('updateDismissBtn');
+      const prompt = document.getElementById('updatePrompt');
+
+      if (reloadBtn) {
+        reloadBtn.addEventListener('click', () => {
+          dismissUpdatePrompt();
+          window.location.reload();
+        });
+      }
+
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', dismissUpdatePrompt);
+      }
+
+      if (prompt) {
+        prompt.addEventListener('click', (event) => {
+          if (event.target === prompt) dismissUpdatePrompt();
+        });
+      }
+
+      checkForDashboardUpdate();
+      window.addEventListener('focus', checkForDashboardUpdate);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) checkForDashboardUpdate();
+      });
+      setInterval(checkForDashboardUpdate, 30 * 60 * 1000);
+    });
+
 
     // === AB HIER ORIGINALER CODE ===
     
@@ -2729,9 +2856,6 @@ icefire:{ bg1:'#051937', bg2:'#ff512f', card:'rgba(255,255,255,0.08)', text:'#ff
     };
 
     const DASHBOARD_FILE_NAME = window.__dashboardFileName || document.querySelector('meta[name="app-file-name"]')?.content || 'Dashboard ACE';
-    const DASHBOARD_VERSION = (() => { const match = String(DASHBOARD_FILE_NAME).match(/(\d+\.\d+\.\d+)/); return match ? match[1] : '0.0.0'; })();
-    const UPDATE_CHECK_CONFIG = window.__dashboardUpdateConfig || { versionUrl: '', downloadUrl: '', repoUrl: '' };
-    const UPDATE_PROMPT_STORAGE_KEY = 'dashboard_update_popup_version';
 
     const els = {
       clock: document.getElementById('clock'),
@@ -2784,12 +2908,6 @@ icefire:{ bg1:'#051937', bg2:'#ff512f', card:'rgba(255,255,255,0.08)', text:'#ff
       locationAllowBtn: document.getElementById('locationAllowBtn'),
       locationLaterBtn: document.getElementById('locationLaterBtn'),
       locationDenyBtn: document.getElementById('locationDenyBtn'),
-      updatePopupOverlay: document.getElementById('updatePopupOverlay'),
-      updatePopupTitle: document.getElementById('updatePopupTitle'),
-      updatePopupSubtitle: document.getElementById('updatePopupSubtitle'),
-      updatePopupBody: document.getElementById('updatePopupBody'),
-      updatePopupOpenLink: document.getElementById('updatePopupOpenLink'),
-      updatePopupLaterBtn: document.getElementById('updatePopupLaterBtn'),
       refreshWeatherBtn: document.getElementById('refreshWeatherBtn'),
       calcTitle: document.getElementById('calcTitle'),
       calcBadge: document.getElementById('calcBadge'),
@@ -4003,15 +4121,6 @@ let timerAudioContext = null;
       requestAnimationFrame(() => card.classList.add('show'));
       window.setTimeout(closeCard, 4200);
     }
-
-    function normalizeVersionString(value) { const match = String(value || '').trim().replace(/^v/i, '').match(/\d+(?:\.\d+){1,3}/); return match ? match[0] : ''; }
-    function compareVersions(a, b) { const pa = normalizeVersionString(a).split('.').map(n => parseInt(n, 10)).filter(n => !Number.isNaN(n)); const pb = normalizeVersionString(b).split('.').map(n => parseInt(n, 10)).filter(n => !Number.isNaN(n)); const len = Math.max(pa.length, pb.length); for (let i = 0; i < len; i += 1) { const av = pa[i] || 0; const bv = pb[i] || 0; if (av > bv) return 1; if (av < bv) return -1; } return 0; }
-    function extractVersionFromPayload(payload) { if (!payload) return ''; if (typeof payload === 'object') return normalizeVersionString(payload.version || payload.tag_name || payload.name || payload.latest || ''); const text = String(payload).trim(); try { const parsed = JSON.parse(text); const parsedVersion = extractVersionFromPayload(parsed); if (parsedVersion) return parsedVersion; } catch (e) {} const firstLine = text.split(/\r?\n/)[0].trim(); return normalizeVersionString(firstLine || text); }
-    function getUpdateLanguagePack() { const isGerman = state.language === 'de'; const isDutch = state.language === 'nl'; return { title: isGerman ? 'Neue Version verfügbar' : isDutch ? 'Nieuwe versie beschikbaar' : 'New version available', subtitle: isGerman ? 'GitHub hat eine frischere Datei gefunden.' : isDutch ? 'GitHub heeft een nieuwere versie gevonden.' : 'GitHub found a newer file.', body: isGerman ? 'Eine neuere Version wurde gefunden. Öffne den Link, um sie direkt anzusehen oder herunterzuladen.' : isDutch ? 'Er is een nieuwere versie gevonden. Open de link om de update direct te bekijken of te downloaden.' : 'A newer version was found. Open the link to view or download it right away.', open: isGerman ? 'Neue Version öffnen' : isDutch ? 'Nieuwe versie openen' : 'Open new version', later: isGerman ? 'Später' : isDutch ? 'Later' : 'Later', current: isGerman ? 'Aktuelle Version' : isDutch ? 'Huidige versie' : 'Current version', latest: isGerman ? 'Neue Version' : isDutch ? 'Nieuwe versie' : 'Latest version', source: isGerman ? 'Quelle' : isDutch ? 'Bron' : 'Source' }; }
-    function setUpdatePopupVisible(visible) { if (!els.updatePopupOverlay) return; els.updatePopupOverlay.classList.toggle('show', !!visible); els.updatePopupOverlay.setAttribute('aria-hidden', visible ? 'false' : 'true'); }
-    function updatePopupTexts(details = {}) { if (!els.updatePopupTitle || !els.updatePopupSubtitle || !els.updatePopupBody || !els.updatePopupOpenLink || !els.updatePopupLaterBtn) return; const pack = getUpdateLanguagePack(); els.updatePopupTitle.textContent = pack.title; els.updatePopupSubtitle.textContent = details.latestVersion ? `${pack.current}: ${DASHBOARD_VERSION} · ${pack.latest}: ${details.latestVersion}` : pack.subtitle; els.updatePopupBody.textContent = details.sourceLabel ? `${pack.body} ${pack.source}: ${details.sourceLabel}.` : pack.body; els.updatePopupOpenLink.textContent = pack.open; els.updatePopupLaterBtn.textContent = pack.later; }
-    function showUpdatePopup(details) { if (!details || !details.downloadUrl) return; const stored = load(UPDATE_PROMPT_STORAGE_KEY, ''); if (stored === details.latestVersion) return; if (els.updatePopupOpenLink) els.updatePopupOpenLink.href = details.downloadUrl; updatePopupTexts(details); setUpdatePopupVisible(true); save(UPDATE_PROMPT_STORAGE_KEY, details.latestVersion || ''); addNotification('info', state.language === 'de' ? 'Update gefunden' : state.language === 'nl' ? 'Update gevonden' : 'Update found', `${DASHBOARD_VERSION} → ${details.latestVersion}`, state.language === 'de' ? 'Gerade eben' : state.language === 'nl' ? 'Zojuist' : 'Just now', state.language === 'de' ? 'GitHub · Update' : state.language === 'nl' ? 'GitHub · update' : 'GitHub · update'); }
-    async function checkGitHubForUpdate() { const versionUrl = String(UPDATE_CHECK_CONFIG.versionUrl || '').trim(); const downloadUrl = String(UPDATE_CHECK_CONFIG.downloadUrl || '').trim(); if (!versionUrl || !downloadUrl) return; try { const response = await fetch(versionUrl, { cache: 'no-store' }); if (!response.ok) return; const payload = await response.text(); const latestVersion = extractVersionFromPayload(payload); if (!latestVersion) return; if (compareVersions(latestVersion, DASHBOARD_VERSION) <= 0) return; showUpdatePopup({ latestVersion, downloadUrl, sourceLabel: UPDATE_CHECK_CONFIG.repoUrl || versionUrl }); } catch (e) {} }
 
     function renderNotifications() {
       if (!els.notificationList) return;
@@ -6417,7 +6526,6 @@ let timerAudioContext = null;
     try { initDartBoard(); } catch(e) {}
     try { updateCalculator(); } catch(e) {}
     try { updateTimer(); } catch(e) {}
-    setTimeout(() => { checkGitHubForUpdate(); }, 1800);
     try { updateTilePreviews(); } catch(e) {}
     try { startTimerLoop(); } catch(e) {}
     try { updateSystemStats(); } catch(e) {}
@@ -6712,10 +6820,6 @@ let timerAudioContext = null;
     if (els.locationAllowBtn) els.locationAllowBtn.addEventListener('click', () => setMapConsent('allow'));
     if (els.locationDenyBtn) els.locationDenyBtn.addEventListener('click', () => setMapConsent('deny'));
     if (els.locationLaterBtn) els.locationLaterBtn.addEventListener('click', hideLocationPrompt);
-    if (els.updatePopupLaterBtn) els.updatePopupLaterBtn.addEventListener('click', () => setUpdatePopupVisible(false));
-    if (els.updatePopupOverlay) {
-      els.updatePopupOverlay.addEventListener('click', (e) => { if (e.target === els.updatePopupOverlay) setUpdatePopupVisible(false); });
-    }
 
     const mapStyle = document.createElement('style');
     mapStyle.textContent = `@keyframes mapPulse {
