@@ -1,0 +1,7 @@
+{
+  "version": "1.0.52",
+  "title": "Neue Version Verfügbar",
+  "message": "Eine neue Dashboard-Version steht zum Download bereit.",
+  "download_url": "https://github.com/DEINNAME/DEIN-REPO/releases/latest",
+  "force_update": false
+}
